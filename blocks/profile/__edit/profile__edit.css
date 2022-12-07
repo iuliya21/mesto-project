@@ -1,0 +1,12 @@
+.profile__edit {
+  display: flex;
+  align-items: baseline;
+  column-gap: 18px;
+}
+
+@media screen and (max-width: 550px) {
+  .profile__edit {
+    column-gap: 10px;
+    margin-left: 25px;
+  }
+}

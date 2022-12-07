@@ -1,0 +1,16 @@
+.footer__paragraph {
+  margin: 0;
+  color: #545454;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.22;
+}
+
+@media screen and (max-width: 550px) {
+  .footer__paragraph {
+    font-size: 14px;
+    line-height: 1.21;
+  }
+}

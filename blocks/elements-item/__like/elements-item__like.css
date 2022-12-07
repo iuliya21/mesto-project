@@ -1,0 +1,13 @@
+.elements-item__like {
+  border: none;
+  width: 22px;
+  height: 19px;
+  padding: 0;
+  background: none;
+  background-image: url(../../../images/like.svg);
+}
+
+.elements-item__like:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}

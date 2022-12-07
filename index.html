@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект Mesto</title>
+    <link rel="stylesheet" href="./pages/index.css">
+  </head>
+  <body class="page">
+    <div class="content">
+      <header class="header">
+        <img src="./images/logo.svg" alt="Логотип" class="header__logo">
+      </header>
+      <main class="main">
+        <section class="profile">
+          <div class="profile__data">
+            <img src="./images/avatar.png" alt="Аватар" class="profile__photo">
+            <div class="profile__info">
+              <div class="profile__edit">
+                <h1 class="profile__title">Жак-Ив Кусто</h1>
+                <button class="profile__button-pencil" type="button" aria-label="Кнопка вызова формы"></button>
+              </div>
+              <p class="profile__paragraph">Исследователь океана</p>
+            </div>
+          </div>
+          <button class="profile__button" type="button" aria-label="Кнопка добавления фотографий"></button>
+        </section>
+        <section aria-label="Проект Место" class="places">
+          <div class="elements"></div>
+        </section>
+      </main>
+      <footer class="footer">
+        <p class="footer__paragraph">	&COPY; 2022 Mesto Russia</p>
+      </footer>
+      <div class="popup popup_type_edit">
+        <div class="popup__container">
+          <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <form class="popup__form" name="Edit profile" novalidate>
+            <input class="popup__form-text popup__form-text_input_name" placeholder="Имя" name="name" minlength="2" maxlength="40" required>
+            <span class="error input-error-name"></span>
+            <input class="popup__form-text popup__form-text_input_job" placeholder="Род деятельности" name="job" minlength="2" maxlength="200" required>
+            <span class="error input-error-job"></span>
+            <button class="popup__button" type="submit">Сохранить</button>
+          </form>
+        </div>
+      </div>
+      <div class="popup popup_type_card">
+        <div class="popup__container">
+          <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
+          <h2 class="popup__title">Новое место</h2>
+          <form class="popup__form" name="new place" novalidate>
+            <input class="popup__form-text popup__form-text_input_place" placeholder="Название" name="place" minlength="2" maxlength="30" required>
+            <span class="error input-error-place"></span>
+            <input class="popup__form-text popup__form-text_input_link" placeholder="Ссылка на картинку" name="link" type="url" required>
+            <span class="error input-error-link"></span>
+            <button class="popup__button" type="submit">Создать</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="popup popup_type_image">
+      <div class="popup-image">
+        <div class="popup-image__container">
+        <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
+        <img src="#" alt=" " class="popup-image__photo">
+        <p class="popup-image__description"></p>
+      </div>  
+    </div>
+    </div>
+    <template id="template-card" class="elements">
+      <article class="elements-item">
+        <button class="elements-item__button" type="button" aria-label="Кнопка удаления"></button>
+        <img class="elements-item__photo">
+        <div class="elements-item__text">
+          <h2 class="elements-item__title"></h2>
+          <button class="elements-item__like" type="button" aria-label="Кнопка поставить лайк"></button>
+        </div>
+      </article>
+    </template>
+    <script src="./scripts/dates.js"></script>
+    <script src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+.elements-item {
+  position: relative;
+  background-color: #fff;
+  padding-bottom: 25px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+  max-width: 282px;
+}
