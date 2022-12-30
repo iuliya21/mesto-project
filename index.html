@@ -15,7 +15,10 @@
       <main class="main">
         <section class="profile">
           <div class="profile__data">
-            <img src="./images/avatar.png" alt="Аватар" class="profile__photo">
+            <div class="profile__photo-edit">
+              <img src="./images/avatar-edit.svg" alt="Карандаш редактирования фотографии">
+            </div>
+            <img class="profile__photo" alt="Фотография профиля" src="./images/avatar.png">
             <div class="profile__info">
               <div class="profile__edit">
                 <h1 class="profile__title">Жак-Ив Кусто</h1>
@@ -38,9 +41,13 @@
           <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
           <h2 class="popup__title">Редактировать профиль</h2>
           <form class="popup__form" name="Edit profile" novalidate>
-            <input class="popup__form-text popup__form-text_input_name" placeholder="Имя" name="name" minlength="2" maxlength="40" required>
+            <input class="popup__form-text popup__form-text_input_name" placeholder="Имя" name="name" 
+            type="text" minlength="2" maxlength="40" pattern="^[a-zA-ZА-Яа-яЁё\s\-]+$" 
+            data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
             <span class="error input-error-name"></span>
-            <input class="popup__form-text popup__form-text_input_job" placeholder="Род деятельности" name="job" minlength="2" maxlength="200" required>
+            <input class="popup__form-text popup__form-text_input_job" placeholder="Род деятельности" name="job" 
+              type="text" minlength="2" maxlength="200" pattern="^[a-zA-ZА-Яа-яЁё\s\-]+$" 
+              data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
             <span class="error input-error-job"></span>
             <button class="popup__button" type="submit">Сохранить</button>
           </form>
@@ -51,7 +58,9 @@
           <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
           <h2 class="popup__title">Новое место</h2>
           <form class="popup__form" name="new place" novalidate>
-            <input class="popup__form-text popup__form-text_input_place" placeholder="Название" name="place" minlength="2" maxlength="30" required>
+            <input class="popup__form-text popup__form-text_input_place" placeholder="Название" name="place" 
+            type="text"  minlength="2" maxlength="30" pattern="^[a-zA-ZА-Яа-яЁё\s\-]+$" 
+            data-error-message="Разрешены только латинские буквы, кириллические буквы, знаки дефиса и пробелы" required>
             <span class="error input-error-place"></span>
             <input class="popup__form-text popup__form-text_input_link" placeholder="Ссылка на картинку" name="link" type="url" required>
             <span class="error input-error-link"></span>
@@ -63,11 +72,22 @@
     <div class="popup popup_type_image">
       <div class="popup-image">
         <div class="popup-image__container">
-        <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
-        <img src="#" alt=" " class="popup-image__photo">
-        <p class="popup-image__description"></p>
-      </div>  
+          <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
+          <img src="#" alt=" " class="popup-image__photo">
+          <p class="popup-image__description"></p>
+        </div>
+      </div>
     </div>
+    <div class="popup popup_type_profile-photo">
+      <div class="popup__container">
+        <button class="popup__button-close" type="button" aria-label="Кнопка закрытия формы"></button>
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form class="popup__form" name="edit photo profile" novalidate>
+          <input class="popup__form-text popup__form-text_input_photo-link" placeholder="Ссылка на изображение" name="photo" type="url" required>
+          <span class="error input-error-link"></span>
+          <button class="popup__button" type="submit">Сохранить</button>
+        </form>
+      </div>
     </div>
     <template id="template-card" class="elements">
       <article class="elements-item">
@@ -79,8 +99,10 @@
         </div>
       </article>
     </template>
-    <script src="./scripts/dates.js"></script>
-    <script src="./scripts/index.js"></script>
-    <script src="./scripts/validate.js"></script>
+    <script src="./components/dates.js" type="module"></script>
+    <script src="./components/index.js" type="module"></script>
+    <script src="./components/card.js" type="module"></script>
+    <script src="./components/validate.js" type="module"></script>
+    <script src="./components/modal.js" type="module"></script>
   </body>
 </html>

@@ -30,6 +30,11 @@ const toggleButtonState = (formSubmitButtonElement, inactiveButtonClass, buttonS
 }
 
 const checkInputValidity = (inputElement, errorElement, inputErrorClass) => {
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity("");
+  }
   if(inputElement.validity.valid) {
     hideInputError(inputElement, errorElement, inputErrorClass);
   } else {
@@ -49,7 +54,7 @@ const handleFormInput = (evt, form, inputErrorClass, formSubmitButtonElement, in
   toggleButtonState(formSubmitButtonElement, inactiveButtonClass, buttonState);
 };
 
-const enableValidation = (config) => {
+export const enableValidation = (config) => {
   const formSelector = config.formSelector;
   const inputSelector = config.inputSelector;
   const inputErrorClass = config.inputErrorClass;
@@ -64,11 +69,3 @@ const enableValidation = (config) => {
   });
   });
 }
-
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__form-text',
-  inputErrorClass: 'popup__form-text_type_error',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled'
-});
