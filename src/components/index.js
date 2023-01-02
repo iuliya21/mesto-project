@@ -1,4 +1,5 @@
 
+import '../pages/index.css';
 import { enableValidation } from "./validate.js";
 import { openModal, closeModal } from "./modal.js";
 import {  renderCard, createItem } from "./card.js";
