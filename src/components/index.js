@@ -98,3 +98,39 @@ enableValidation({
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
 });
+
+//авторизация на сервере
+const currentUser = {
+  currentUrl: 'https://nomoreparties.co/v1/plus-cohort-18',
+  headers: {
+    authorization: '5316090b-29fc-4b6a-8b2f-268d3472034e',
+    'Content-Type': 'application/json'
+  }
+};
+
+//проверка запроса
+const checkResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  } else {
+    return Promise.reject(`Ошибка: ${res.status}`)
+  }
+}
+
+//данные о текущем пользователе
+const getUserCurrent = () => {
+  return fetch(`${currentUser.currentUrl}/users/me`, {
+  headers: {
+    authorization: '5316090b-29fc-4b6a-8b2f-268d3472034e',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(res => checkResponse(res))
+  .then(res => console.log(res))
+}
+
+getUserCurrent();
+
+
+
+
