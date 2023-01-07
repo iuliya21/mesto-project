@@ -61,6 +61,7 @@ function submitHandlerCard(evt) {
   createNewCard(placeInput.value, linkInput.value)
     .then((item) => {
       renderCard(createItem(item));
+      closeModal(modalCreateCard);
     })
     .catch((err) => {
       console.error(err)
@@ -68,7 +69,6 @@ function submitHandlerCard(evt) {
     .finally(() => {
       buttonCreateCard.textContent = 'Создать';
     })
-  closeModal(modalCreateCard);
 }
 
 //Функция установки в текстовые поля формы имени и рода деятельности первого исследователя
@@ -85,13 +85,18 @@ const clearInput = () => {
 //функция, которая сохраняет введенные значения в форму редактирования профиля и закрывает её
 function submitHandlerForm(evt) {
   evt.preventDefault();
-  nameText.textContent = nameInput.value;
-  jobText.textContent = jobInput.value;
-  buttonEditProfile.textContent = 'Сохранение...'
+  buttonEditProfile.textContent = 'Сохранение...';
   editInfoUser(nameInput.value, jobInput.value)
+    .then(() => {
+      nameText.textContent = nameInput.value;
+    jobText.textContent = jobInput.value;
+      closeModal(modalEditProfile);
+    })
+    .catch((err) => {
+      console.error(err)
+    })
     .finally(() => {
       buttonEditProfile.textContent = 'Сохранить';
-      closeModal(modalEditProfile);
     })
 }
 
@@ -104,6 +109,7 @@ function changeAvatar(evt) {
     .then((item) => {
       profilePhoto.src = item.avatar;
       profilePhoto.alt = item.avatar;
+      closeModal(editPhotoProfile);
     })
     .catch((err) => {
       console.error(err)
@@ -111,7 +117,6 @@ function changeAvatar(evt) {
     .finally(() => {
       buttonEditPhoto.textContent = 'Сохранить';
     })
-    closeModal(editPhotoProfile);
 }
 
 //слушатель на кнопку в форме изменения аватара

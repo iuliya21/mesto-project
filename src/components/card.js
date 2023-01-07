@@ -57,19 +57,20 @@ export const createItem = (item) => {
 
   imageLike.addEventListener("click", function (evt) {
       if (!evt.target.classList.contains("elements-item__like_active")) {
-        evt.target.classList.add("elements-item__like_active");
         pushLike(item._id)
           .then((data) => {
+            evt.target.classList.add("elements-item__like_active");
             countLike.textContent = data.likes.length;
-            console.log(data);
+            //console.log(data);
           })
           .catch((err) => {
             console.error(err)
           })
       } else {
-        evt.target.classList.remove("elements-item__like_active");
+        
         deleteLike(item._id)
           .then((data) => {
+            evt.target.classList.remove("elements-item__like_active");
             if (data.likes.length === 0) {
               countLike.textContent = "";
             } else {
