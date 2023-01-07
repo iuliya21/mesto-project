@@ -1,5 +1,5 @@
 //Первоначальный массив карточек: фотографий и названий
-export const initialCards = [
+const initialCards = [
   {
     name: "Москва",
     link: "https://cdn2.tu-tu.ru/image/pagetree_node_data/1/055c4b01273eb986fead1a6db4c20e9f/",

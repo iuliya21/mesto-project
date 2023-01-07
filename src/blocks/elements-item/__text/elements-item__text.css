@@ -4,4 +4,5 @@
   justify-content: space-between;
   width: 241px;
   align-items: center;
+  min-height: 39px;
 }

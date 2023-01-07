@@ -12,7 +12,7 @@
         <img src="<%=require('./images/logo.svg')%>" alt="Логотип" class="header__logo">
       </header>
       <main class="main">
-        <section class="profile">
+        <section class="profile" id="profile">
           <div class="profile__data">
             <div class="profile__photo-edit">
               <img src="<%=require('./images/avatar-edit.svg')%>" alt="Карандаш редактирования фотографии">
@@ -83,18 +83,21 @@
         <h2 class="popup__title">Обновить аватар</h2>
         <form class="popup__form" name="edit photo profile" novalidate>
           <input class="popup__form-text popup__form-text_input_photo-link" placeholder="Ссылка на изображение" name="photo" type="url" required>
-          <span class="error input-error-link"></span>
-          <button class="popup__button" type="submit">Сохранить</button>
+          <span class="error input-error-photo"></span>
+          <button class="popup__button popup__button_disabled" type="submit" disabled>Сохранить</button>
         </form>
       </div>
     </div>
-    <template id="template-card" class="elements check">
+    <template id="template-card" class="elements">
       <article class="elements-item">
         <button class="elements-item__button" type="button" aria-label="Кнопка удаления"></button>
         <img class="elements-item__photo">
         <div class="elements-item__text">
           <h2 class="elements-item__title"></h2>
-          <button class="elements-item__like" type="button" aria-label="Кнопка поставить лайк"></button>
+          <div class="elements-item__wrapper">
+            <button class="elements-item__like" type="button" aria-label="Кнопка поставить лайк"></button>
+            <p class="elements-item__counter-like"></p>
+          </div>
         </div>
       </article>
     </template>

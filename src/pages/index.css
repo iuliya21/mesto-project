@@ -29,7 +29,10 @@
 @import url(../blocks/elements-item/__text/elements-item__text.css);
 @import url(../blocks/elements-item/__title/elements-item__title.css);
 @import url(../blocks/elements-item/__like/elements-item__like.css);
+@import url(../blocks/elements-item/__wrapper/elements-item__wrapper.css);
+@import url(../blocks/elements-item/__counter-like/elements-item__counter-like.css);
 @import url(../blocks/elements-item/__button/elements-item__button.css);
+@import url(../blocks/elements-item/__button/_inactive/elements-item__button_active.css);
 @import url(../blocks/elements-item/__like/_active/elements-item__like_active.css);
 
 @import url(../blocks/footer/footer.css);
