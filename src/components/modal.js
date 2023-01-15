@@ -1,5 +1,7 @@
 const modalActiveClass = "popup_opened";
 const modals = document.querySelectorAll(".popup");
+const modalCreateCard = document.querySelector(".popup_type_card");
+const formPlace = modalCreateCard.querySelector(".popup__form");
 
 //Функция открытия окна
 export const openModal = function (popup) {
@@ -29,4 +31,9 @@ modals.forEach((popup) => {
     }
   });
 });
+
+//функция очистки модального окна: название места и ссылка
+export const clearInput = () => {
+  formPlace.reset();
+};
 
