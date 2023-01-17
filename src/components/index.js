@@ -1,8 +1,7 @@
-
 import '../pages/index.css';
 import { enableValidation } from "./validate.js";
 import { openModal, closeModal, clearInput } from "./modal.js";
-import { renderCard, removeCard } from "./card.js";
+import { renderCard, createItem, removeCard, profile } from "./card.js";
 import { getCards, getUserCurrent, editInfoUser, createNewCard, changePhoto, pushLike, deleteLike, deleteCard } from "./api.js";
 
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
@@ -13,7 +12,6 @@ const modalCreateCard = document.querySelector(".popup_type_card");
 const placeInput = modalCreateCard.querySelector(".popup__form-text_input_place");
 const linkInput = modalCreateCard.querySelector(".popup__form-text_input_link");
 const formPlace = modalCreateCard.querySelector(".popup__form"); //форма для второго попапа
-const profile = document.querySelector(".profile"); //профиль пользователя
 const editPhotoProfile = document.querySelector(".popup_type_profile-photo"); //попап редактирования фото профиля
 const formEditPhoto = editPhotoProfile.querySelector(".popup__form"); //форма попапа редактирования фото профиля
 const buttonEditPhoto = editPhotoProfile.querySelector(".popup__button"); //кнопка сохранить новое фото профиля
@@ -26,89 +24,6 @@ const jobInput = formElement.querySelector(".popup__form-text_input_job"); //и�
 const buttonCreateCard = formPlace.querySelector(".popup__button"); //кнопка "создать"
 const profilePhoto = document.querySelector(".profile__photo");
 const profilePhotoEdit = document.querySelector(".profile__photo-edit");
-const cardTemplateContent = document.querySelector("#template-card").content; //контент template
-const cardItem = cardTemplateContent.querySelector(".elements-item");
-const modalImage = document.querySelector(".popup_type_image"); //третий попап с увеличенным изображением
-const fullImage = document.querySelector(".popup-image__photo"); //фото из третьего попапа
-const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
-
-//функция создания карточки
-const createItem = (item) => {
-  const element = cardItem.cloneNode(true);
-  const elementName = element.querySelector(".elements-item__title");
-  const elementPhoto = element.querySelector(".elements-item__photo"); //фотография места
-  const btnRemove = element.querySelector(".elements-item__button");
-  const imageLike = element.querySelector(".elements-item__like");
-  const countLike = element.querySelector(".elements-item__counter-like");
-
-  const openImage = function () {
-    fullImage.alt = item.name;
-    fullImage.src = item.link;
-    imageOpenFullDescription.textContent = item.name;
-    openModal(modalImage);
-  };
-
-  elementPhoto.addEventListener("click", openImage);
-
-  elementName.textContent = item.name;
-  elementPhoto.src = item.link;
-  elementPhoto.alt = item.name;
-
-  if (profile.id === item.owner._id) {
-    btnRemove.classList.add("elements-item__button_active");
-  }
-  
-  btnRemove.addEventListener("click", () => {
-    deleteCard(item._id)
-      .then(() => {
-        removeCard(element);
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-    })
-
-  imageLike.addEventListener("click", function (evt) {
-      if (!evt.target.classList.contains("elements-item__like_active")) {
-        pushLike(item._id)
-          .then((data) => {
-            evt.target.classList.add("elements-item__like_active");
-            countLike.textContent = data.likes.length;
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-      } else {
-        deleteLike(item._id)
-          .then((data) => {
-            evt.target.classList.remove("elements-item__like_active");
-            if (data.likes.length === 0) {
-              countLike.textContent = "";
-            } else {
-              countLike.textContent = data.likes.length;
-            }
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-      }
-  });
-
-  if (item.likes.length === 0) {
-    countLike.textContent = "";
-  } else {
-    countLike.textContent = item.likes.length;
-  }
-
-  //при перезагрузке страницы мои лайки не пропадают
-  item.likes.forEach((obj) => {
-    if (Object.values(obj).includes(profile.id)) {
-      imageLike.classList.add("elements-item__like_active");
-    }
-  })
-
-  return element;
-};
 
 Promise.all([getUserCurrent(), getCards()])
   .then(([myProfile, cards]) => {//данные из моего профиля
@@ -118,7 +33,7 @@ Promise.all([getUserCurrent(), getCards()])
     profilePhoto.src = myProfile.avatar;
 
     cards.reverse().forEach((item) => {//загрузка карточек с сервера
-      renderCard(createItem(item));
+      renderCard(createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike));
     })
   })
   .catch((err) => {
@@ -137,6 +52,44 @@ profilePhotoEdit.addEventListener("mouseover", () => {
   profilePhotoEdit.style.visibility = "visible";
 });
 
+//отправка запроса для удаления карточки
+function myCardDelete(item, element) {
+  deleteCard(item._id)
+    .then(() => {
+      removeCard(element);
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+}
+
+//поставить мой лайк
+function myPushLike(item, evt, countLike) {
+  pushLike(item._id)
+    .then((data) => {
+      evt.target.classList.add("elements-item__like_active");
+      countLike.textContent = data.likes.length;
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+}
+
+//удалить мой лайк
+function myDeleteLike(item, evt, countLike) {
+  deleteLike(item._id)
+    .then((data) => {
+      evt.target.classList.remove("elements-item__like_active");
+      if (data.likes.length === 0) {
+        countLike.textContent = "";
+      } else {
+        countLike.textContent = data.likes.length;
+      }
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+}
 
 //функция сохранения информации в новую карточку
 function submitHandlerCard(evt) {
@@ -144,7 +97,7 @@ function submitHandlerCard(evt) {
   buttonCreateCard.textContent = 'Создание...';
   createNewCard(placeInput.value, linkInput.value)
     .then((item) => {
-      renderCard(createItem(item));
+      renderCard(createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike));
       closeModal(modalCreateCard);
     })
     .catch((err) => {
@@ -198,13 +151,13 @@ function changeAvatar(evt) {
     })
 }
 
-//слушатель на кнопку в форме изменения аватара
-formEditPhoto.addEventListener('submit', changeAvatar);
-
 //слушатель на редактирование фото
 profilePhotoEdit.addEventListener("click", () => {
   openModal(editPhotoProfile);
 });
+
+//слушатель на кнопку в форме изменения аватара
+formEditPhoto.addEventListener('submit', changeAvatar);
 
 //Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы
 buttonOpenPopupProfile.addEventListener("click", () => {
