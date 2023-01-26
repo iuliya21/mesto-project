@@ -96,3 +96,9 @@ export const changePhoto = (photo) => {
   })
   .then(res => checkResponse(res))
 }
+
+class Api {
+  constructor() {
+    
+  }
+}
