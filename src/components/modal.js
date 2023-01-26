@@ -36,4 +36,3 @@ modals.forEach((popup) => {
 export const clearInput = () => {
   formPlace.reset();
 };
-
