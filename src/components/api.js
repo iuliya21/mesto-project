@@ -99,6 +99,10 @@ export const changePhoto = (photo) => {
 
 class Api {
   constructor() {
+
+  }
+
+  getCards() {
     
   }
 }
