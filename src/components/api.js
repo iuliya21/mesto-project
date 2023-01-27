@@ -5,104 +5,94 @@ const currentUser = {
     authorization: '5316090b-29fc-4b6a-8b2f-268d3472034e',
     'Content-Type': 'application/json'
   }
-};
-
-//проверка статуса запроса
-const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  } else {
-    return Promise.reject(`Ошибка: ${res.status}`)
-  }
-}
-
-//данные о текущем пользователе
-export const getUserCurrent = () => {
-  return fetch(`${currentUser.currentUrl}/users/me`, {
-  headers: currentUser.headers
-})
-  .then(res => checkResponse(res))
-}
-
-//массив карточек с сервера
-export const getCards = () => {
-  return fetch(`${currentUser.currentUrl}/cards`, {
-    headers: currentUser.headers
-  })
-  .then(res => checkResponse(res))
-}
-
-//изменение данных имени и рода деятельности
-export const editInfoUser = (name, about) => {
-  return fetch(`${currentUser.currentUrl}/users/me`, {
-    method: 'PATCH',
-    headers: currentUser.headers,
-    body: JSON.stringify({
-      name: name,
-      about: about
-    })
-  })
-  .then(res => checkResponse(res))
-}
-
-//создание моей карточки для сервера
-export const createNewCard = (name, link) => {
-  return fetch(`${currentUser.currentUrl}/cards`, {
-    method: 'POST',
-    headers: currentUser.headers,
-    body: JSON.stringify({
-      name: name,
-      link: link
-    })
-  })
-  .then(res => checkResponse(res))
-}
-
-//добавление лайка фотографии
-export const pushLike = (idCard) => {
-  return fetch(`${currentUser.currentUrl}/cards/likes/${idCard}`, {
-    method: 'PUT',
-    headers: currentUser.headers
-  })
-  .then(res => checkResponse(res))
-}
-
-//удаление лайка с фотографии
-export const deleteLike = (idCard) => {
-  return fetch(`${currentUser.currentUrl}/cards/likes/${idCard}`, {
-    method: 'DELETE',
-    headers: currentUser.headers
-  })
-  .then(res => checkResponse(res))
-}
-
-//удаление карточки
-export const deleteCard = (idCard) => {
-  return fetch(`${currentUser.currentUrl}/cards/${idCard}`, {
-    method: 'DELETE',
-    headers: currentUser.headers
-  })
-  .then(res => checkResponse(res))
-}
-
-//изменение моего аватара
-export const changePhoto = (photo) => {
-  return fetch(`${currentUser.currentUrl}/users/me/avatar`, {
-    method: 'PATCH',
-    headers: currentUser.headers,
-    body: JSON.stringify({
-      avatar: photo
-    })
-  })
-  .then(res => checkResponse(res))
 }
 
 class Api {
-  constructor() {
-
+  constructor({ currentUrl, headers }) {
+    this.currentUrl = currentUrl;
+    this.headers = headers;
   }
 
-  getCards() {
-    
+  _checkResponse(res) { // приватный метод - проверка статуса запроса
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка: ${res.status}`)
+    }
+  }
+
+  getCards() { // загрузка карточек с сервера
+    return fetch(`${this.currentUrl}/cards`, {
+      headers: this.headers
+    })
+    .then(res => this._checkResponse(res))
+  }
+
+  getUserCurrent() { // получение данных о пользователе
+    return fetch(`${this.currentUrl}/users/me`, {
+      headers: this.headers
+    })
+      .then(res => this._checkResponse(res))
+  }
+
+  editInfoUser(name, about) { // изменение данных пользователи и рода деятельности
+    return fetch(`${this.currentUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({
+        name: name,
+        about: about
+      })
+    })
+    .then(res => this._checkResponse(res))
+  }
+
+  createNewCard(name, link) { // создание новой карточки
+    return fetch(`${this.currentUrl}/cards`, {
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify({
+        name: name,
+        link: link
+      })
+    })
+    .then(res => this._checkResponse(res))
+  }
+
+  pushLike(idCard) { // добавление лайка фотографии
+    return fetch(`${this.currentUrl}/cards/likes/${idCard}`, {
+      method: 'PUT',
+      headers: this.headers
+    })
+    .then(res => this._checkResponse(res))
+  }
+
+  deleteLike(idCard) { // удаление лайка с фотографии
+    return fetch(`${this.currentUrl}/cards/likes/${idCard}`, {
+      method: 'DELETE',
+      headers: this.headers
+    })
+    .then(res => this._checkResponse(res))
+  }
+
+  deleteCard(idCard) { // удаление карточки
+    return fetch(`${this.currentUrl}/cards/${idCard}`, {
+      method: 'DELETE',
+      headers: this.headers
+    })
+    .then(res => this._checkResponse(res))
+  }
+
+  changePhoto(photo) { // изменить аватар
+    return fetch(`${this.currentUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({
+        avatar: photo
+      })
+    })
+    .then(res => this._checkResponse(res))
   }
 }
+
+export const api = new Api(currentUser);

@@ -2,7 +2,7 @@ import '../pages/index.css';
 import { enableValidation } from "./validate.js";
 import { openModal, closeModal, clearInput } from "./modal.js";
 import { renderCard, createItem, removeCard, profile } from "./card.js";
-import { getCards, getUserCurrent, editInfoUser, createNewCard, changePhoto, pushLike, deleteLike, deleteCard } from "./api.js";
+import { api } from "./api.js";
 
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
 const buttonOpenPopupCard = document.querySelector(".profile__button"); //кнопка добавления новой карточки
@@ -25,7 +25,7 @@ const buttonCreateCard = formPlace.querySelector(".popup__button"); //кнопк
 const profilePhoto = document.querySelector(".profile__photo");
 const profilePhotoEdit = document.querySelector(".profile__photo-edit");
 
-Promise.all([getUserCurrent(), getCards()])
+Promise.all([api.getUserCurrent(), api.getCards()])
   .then(([myProfile, cards]) => {//данные из моего профиля
     profile.id = myProfile._id;
     nameText.textContent = myProfile.name;
@@ -54,7 +54,7 @@ profilePhotoEdit.addEventListener("mouseover", () => {
 
 //отправка запроса для удаления карточки
 function myCardDelete(item, element) {
-  deleteCard(item._id)
+  api.deleteCard(item._id)
     .then(() => {
       removeCard(element);
     })
@@ -65,7 +65,7 @@ function myCardDelete(item, element) {
 
 //поставить мой лайк
 function myPushLike(item, evt, countLike) {
-  pushLike(item._id)
+  api.pushLike(item._id)
     .then((data) => {
       evt.target.classList.add("elements-item__like_active");
       countLike.textContent = data.likes.length;
@@ -77,7 +77,7 @@ function myPushLike(item, evt, countLike) {
 
 //удалить мой лайк
 function myDeleteLike(item, evt, countLike) {
-  deleteLike(item._id)
+  api.deleteLike(item._id)
     .then((data) => {
       evt.target.classList.remove("elements-item__like_active");
       if (data.likes.length === 0) {
@@ -95,7 +95,7 @@ function myDeleteLike(item, evt, countLike) {
 function submitHandlerCard(evt) {
   evt.preventDefault();
   buttonCreateCard.textContent = 'Создание...';
-  createNewCard(placeInput.value, linkInput.value)
+  api.createNewCard(placeInput.value, linkInput.value)
     .then((item) => {
       renderCard(createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike));
       closeModal(modalCreateCard);
@@ -118,7 +118,7 @@ function setInput() {
 function submitHandlerForm(evt) {
   evt.preventDefault();
   buttonEditProfile.textContent = 'Сохранение...';
-  editInfoUser(nameInput.value, jobInput.value)
+  api.editInfoUser(nameInput.value, jobInput.value)
     .then(() => {
       nameText.textContent = nameInput.value;
       jobText.textContent = jobInput.value;
@@ -137,7 +137,7 @@ function changeAvatar(evt) {
   evt.preventDefault();
   buttonEditPhoto.textContent = 'Сохранение...';
   const avatar = inputEditPhotoProfile.value;
-  changePhoto(avatar)
+  api.changePhoto(avatar)
     .then((item) => {
       profilePhoto.src = item.avatar;
       profilePhoto.alt = item.avatar;
