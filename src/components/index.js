@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import { enableValidation } from "./validate.js";
+import { FormValidator } from "./validate.js";
 import { openModal, closeModal, clearInput } from "./modal.js";
 import { renderCard, createItem, removeCard, profile } from "./card.js";
 import { api } from "./api.js";
@@ -179,10 +179,17 @@ formElement.addEventListener("submit", submitHandlerForm);
 //Отправка формы добавления карточки
 formPlace.addEventListener("submit", submitHandlerCard);
 
-enableValidation({
-  formSelector: ".popup__form",
+const settings = {
   inputSelector: ".popup__form-text",
   inputErrorClass: "popup__form-text_type_error",
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
-});
+}
+
+// запуск валидации
+const profileValidate = new FormValidator(settings, formElement);
+profileValidate.enableValidation();
+const addCardValidate = new FormValidator(settings, formPlace);
+addCardValidate.enableValidation();
+const profilePhotoValidate = new FormValidator(settings, formEditPhoto);
+profilePhotoValidate.enableValidation();
