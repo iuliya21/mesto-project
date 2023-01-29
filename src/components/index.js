@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import { FormValidator } from "./FormValidator.js";
 import { openModal, closeModal, clearInput } from "./modal.js";
-import { renderCard, createItem, removeCard, profile } from "./Card.js";
+import { renderCard, createItem, removeCard, profile, Card } from "./Card.js";
 import { Api, currentUser } from "./Api.js";
 import { UserInfo } from "./UserInfo.js";
 
@@ -28,7 +28,6 @@ const profilePhotoEdit = document.querySelector(".profile__photo-edit");
 
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
-
 
 Promise.all([api.getUserCurrent(), api.getCards()])
   .then(([myProfile, cards]) => { //данные из моего профиля

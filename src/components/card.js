@@ -23,7 +23,7 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
   const imageLike = element.querySelector(".elements-item__like");
   const countLike = element.querySelector(".elements-item__counter-like");
 
-  const openImage = function () { //функция, которая по клику увеличивает фото карточки
+  const openImage = function () { // функция, которая по клику увеличивает фото карточки
     fullImage.alt = item.name;
     fullImage.src = item.link;
     imageOpenFullDescription.textContent = item.name;
@@ -68,9 +68,31 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
   return element;
 };
 
-class Card {
-  constructor() {
-
+export class Card {
+  constructor(item) {
+    this._name = item.name;
+    this._link = item.link;
   }
   
+  _getElement() { // создание разметки
+    const element = document
+    .querySelector("#template-card")
+    .content
+    .querySelector(".elements-item")
+    .cloneNode(true);
+
+    return element;
+  }
+
+  generate() {
+    this.element = this._getElement(); // запишем разметку в приватное поле _element
+    this.element.querySelector(".elements-item__title").textContent = this._name;
+    this.element.querySelector(".elements-item__photo").src = this._link;
+    this.element.querySelector(".elements-item__photo").alt = this._link;
+
+    return this._element;
+  }
+
+
+
 }
