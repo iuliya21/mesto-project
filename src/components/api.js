@@ -1,5 +1,5 @@
 //авторизация на сервере
-const currentUser = {
+export const currentUser = {
   currentUrl: 'https://nomoreparties.co/v1/plus-cohort-18',
   headers: {
     authorization: '5316090b-29fc-4b6a-8b2f-268d3472034e',
@@ -7,7 +7,7 @@ const currentUser = {
   }
 }
 
-class Api {
+export class Api {
   constructor({ currentUrl, headers }) {
     this.currentUrl = currentUrl;
     this.headers = headers;
@@ -94,5 +94,3 @@ class Api {
     .then(res => this._checkResponse(res))
   }
 }
-
-export const api = new Api(currentUser);

@@ -1,8 +1,9 @@
 import '../pages/index.css';
-import { FormValidator } from "./validate.js";
+import { FormValidator } from "./FormValidator.js";
 import { openModal, closeModal, clearInput } from "./modal.js";
-import { renderCard, createItem, removeCard, profile } from "./card.js";
-import { api } from "./api.js";
+import { renderCard, createItem, removeCard, profile } from "./Card.js";
+import { Api, currentUser } from "./Api.js";
+import { UserInfo } from "./UserInfo.js";
 
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
 const buttonOpenPopupCard = document.querySelector(".profile__button"); //кнопка добавления новой карточки
@@ -25,20 +26,44 @@ const buttonCreateCard = formPlace.querySelector(".popup__button"); //кнопк
 const profilePhoto = document.querySelector(".profile__photo");
 const profilePhotoEdit = document.querySelector(".profile__photo-edit");
 
-Promise.all([api.getUserCurrent(), api.getCards()])
-  .then(([myProfile, cards]) => {//данные из моего профиля
-    profile.id = myProfile._id;
-    nameText.textContent = myProfile.name;
-    jobText.textContent = myProfile.about;
-    profilePhoto.src = myProfile.avatar;
+const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
+const api = new Api(currentUser);
 
-    cards.reverse().forEach((item) => {//загрузка карточек с сервера
+
+Promise.all([api.getUserCurrent(), api.getCards()])
+  .then(([myProfile, cards]) => { //данные из моего профиля
+    userInfo.setUserInfo(myProfile);
+
+    cards.reverse().forEach((item) => { //загрузка карточек с сервера
       renderCard(createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike));
     })
   })
   .catch((err) => {
     console.error(err);
 })
+
+//функция, которая сохраняет введенные значения в форму редактирования профиля и закрывает её
+function submitHandlerForm(evt) {
+  evt.preventDefault();
+  buttonEditProfile.textContent = 'Сохранение...';
+  api.editInfoUser(nameInput.value, jobInput.value)
+    .then((data) => {
+      userInfo.setUserInfo(data);
+      closeModal(modalEditProfile);
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+    .finally(() => {
+      buttonEditProfile.textContent = 'Сохранить';
+    })
+}
+
+//Функция установки в текстовые поля формы имени и рода деятельности первого исследователя
+function setInput() {
+  nameInput.value = nameText.textContent;
+  jobInput.value = jobText.textContent;
+}
 
 profilePhoto.addEventListener("mouseover", () => {
   profilePhotoEdit.style.visibility = "visible";
@@ -108,39 +133,14 @@ function submitHandlerCard(evt) {
     })
 }
 
-//Функция установки в текстовые поля формы имени и рода деятельности первого исследователя
-function setInput() {
-  nameInput.value = nameText.textContent;
-  jobInput.value = jobText.textContent;
-}
-
-//функция, которая сохраняет введенные значения в форму редактирования профиля и закрывает её
-function submitHandlerForm(evt) {
-  evt.preventDefault();
-  buttonEditProfile.textContent = 'Сохранение...';
-  api.editInfoUser(nameInput.value, jobInput.value)
-    .then(() => {
-      nameText.textContent = nameInput.value;
-      jobText.textContent = jobInput.value;
-      closeModal(modalEditProfile);
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-    .finally(() => {
-      buttonEditProfile.textContent = 'Сохранить';
-    })
-}
-
 //функция изменения аватарки пользователя
 function changeAvatar(evt) {
   evt.preventDefault();
   buttonEditPhoto.textContent = 'Сохранение...';
   const avatar = inputEditPhotoProfile.value;
   api.changePhoto(avatar)
-    .then((item) => {
-      profilePhoto.src = item.avatar;
-      profilePhoto.alt = item.avatar;
+    .then((data) => {
+      userInfo.setUserInfo(data);
       closeModal(editPhotoProfile);
     })
     .catch((err) => {

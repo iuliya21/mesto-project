@@ -67,3 +67,10 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
 
   return element;
 };
+
+class Card {
+  constructor() {
+
+  }
+  
+}
