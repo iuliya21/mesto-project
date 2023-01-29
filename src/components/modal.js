@@ -36,25 +36,3 @@ modals.forEach((popup) => {
 export const clearInput = () => {
   formPlace.reset();
 };
-
-class Popup {
-  constructor(selector) {
-    this.selector = selector;
-  }
-
-  open() {
-
-  }
-
-  close() {
-
-  }
-
-  _handleEscClose() {
-
-  }
-
-  setEventListeners() {
-    
-  }
-}

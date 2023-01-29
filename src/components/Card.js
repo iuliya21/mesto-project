@@ -39,17 +39,17 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
   if (profile.id === item.owner._id) {
     btnRemove.classList.add("elements-item__button_active");
   }
-  
+
   btnRemove.addEventListener("click", () => {
     myCardDelete(item, element);
-    })
+  })
 
   imageLike.addEventListener("click", function (evt) {
-      if (!evt.target.classList.contains("elements-item__like_active")) {
-        myPushLike(item, evt, countLike);
-      } else {
-        myDeleteLike(item, evt, countLike);
-      }
+    if (!evt.target.classList.contains("elements-item__like_active")) {
+      myPushLike(item, evt, countLike);
+    } else {
+      myDeleteLike(item, evt, countLike);
+    }
   });
 
   if (item.likes.length === 0) {
@@ -73,13 +73,13 @@ export class Card {
     this._name = item.name;
     this._link = item.link;
   }
-  
+
   _getElement() { // создание разметки
     const element = document
-    .querySelector("#template-card")
-    .content
-    .querySelector(".elements-item")
-    .cloneNode(true);
+      .querySelector("#template-card")
+      .content
+      .querySelector(".elements-item")
+      .cloneNode(true);
 
     return element;
   }
