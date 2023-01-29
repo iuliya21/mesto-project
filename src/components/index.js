@@ -4,12 +4,13 @@ import { openModal, closeModal, clearInput } from "./modal.js";
 import { renderCard, createItem, removeCard, profile, Card } from "./Card.js";
 import { Api, currentUser } from "./Api.js";
 import { UserInfo } from "./UserInfo.js";
+import { Popup } from "./Popup.js";
 
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
 const buttonOpenPopupCard = document.querySelector(".profile__button"); //кнопка добавления новой карточки
 const modalEditProfile = document.querySelector(".popup_type_edit"); //первый попап
 const buttonEditProfile = modalEditProfile.querySelector(".popup__button"); //кнопка сохранить профиль
-const modalCreateCard = document.querySelector(".popup_type_card");
+const modalCreateCard = document.querySelector(".popup_type_card"); // второй попап
 const placeInput = modalCreateCard.querySelector(".popup__form-text_input_place");
 const linkInput = modalCreateCard.querySelector(".popup__form-text_input_link");
 const formPlace = modalCreateCard.querySelector(".popup__form"); //форма для второго попапа
@@ -29,6 +30,11 @@ const profilePhotoEdit = document.querySelector(".profile__photo-edit");
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
 
+const popupProfile = new Popup(".popup_type_edit");
+const popupAddCard = new Popup(".popup_type_card");
+const popupFullImage = new Popup(".popup_type_image");
+const popupAvatar = new Popup(".popup_type_profile-photo");
+
 Promise.all([api.getUserCurrent(), api.getCards()])
   .then(([myProfile, cards]) => { //данные из моего профиля
     userInfo.setUserInfo(myProfile);
@@ -39,7 +45,7 @@ Promise.all([api.getUserCurrent(), api.getCards()])
   })
   .catch((err) => {
     console.error(err);
-})
+  })
 
 //функция, которая сохраняет введенные значения в форму редактирования профиля и закрывает её
 function submitHandlerForm(evt) {
@@ -48,7 +54,7 @@ function submitHandlerForm(evt) {
   api.editInfoUser(nameInput.value, jobInput.value)
     .then((data) => {
       userInfo.setUserInfo(data);
-      closeModal(modalEditProfile);
+      popupProfile.close();
     })
     .catch((err) => {
       console.error(err)
@@ -93,10 +99,10 @@ function myPushLike(item, evt, countLike) {
     .then((data) => {
       evt.target.classList.add("elements-item__like_active");
       countLike.textContent = data.likes.length;
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 //удалить мой лайк
@@ -140,7 +146,7 @@ function changeAvatar(evt) {
   api.changePhoto(avatar)
     .then((data) => {
       userInfo.setUserInfo(data);
-      closeModal(editPhotoProfile);
+      popupAvatar.close();
     })
     .catch((err) => {
       console.error(err)
@@ -152,7 +158,7 @@ function changeAvatar(evt) {
 
 //слушатель на редактирование фото
 profilePhotoEdit.addEventListener("click", () => {
-  openModal(editPhotoProfile);
+  popupAvatar.open();
 });
 
 //слушатель на кнопку в форме изменения аватара
@@ -160,7 +166,7 @@ formEditPhoto.addEventListener('submit', changeAvatar);
 
 //Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы
 buttonOpenPopupProfile.addEventListener("click", () => {
-  openModal(modalEditProfile);
+  popupProfile.open();
   setInput();
 });
 
