@@ -4,7 +4,7 @@ import { openModal, closeModal, clearInput } from "./modal.js";
 import { renderCard, createItem, removeCard, profile, Card } from "./Card.js";
 import { Api, currentUser } from "./Api.js";
 import { UserInfo } from "./UserInfo.js";
-import { Popup } from "./Popup.js";
+import { Popup, PopupWithImage, PopupWithForm } from "./Popup.js";
 
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
 const buttonOpenPopupCard = document.querySelector(".profile__button"); //кнопка добавления новой карточки
@@ -26,13 +26,15 @@ const jobInput = formElement.querySelector(".popup__form-text_input_job"); //и�
 const buttonCreateCard = formPlace.querySelector(".popup__button"); //кнопка "создать"
 const profilePhoto = document.querySelector(".profile__photo");
 const profilePhotoEdit = document.querySelector(".profile__photo-edit");
+const fullImage = document.querySelector(".popup-image__photo"); // фотография полноэкранного изображения
+const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
 
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
 
 const popupProfile = new Popup(".popup_type_edit");
+const popupFullImage = new PopupWithImage(".popup_type_image", { fullImage, imageOpenFullDescription });
 const popupAddCard = new Popup(".popup_type_card");
-const popupFullImage = new Popup(".popup_type_image");
 const popupAvatar = new Popup(".popup_type_profile-photo");
 
 Promise.all([api.getUserCurrent(), api.getCards()])
@@ -164,7 +166,7 @@ profilePhotoEdit.addEventListener("click", () => {
 //слушатель на кнопку в форме изменения аватара
 formEditPhoto.addEventListener('submit', changeAvatar);
 
-//Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы
+//Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы для редактирования профиля
 buttonOpenPopupProfile.addEventListener("click", () => {
   popupProfile.open();
   setInput();

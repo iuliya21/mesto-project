@@ -69,9 +69,10 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
 };
 
 export class Card {
-  constructor(item) {
+  constructor(item, handleCardClick) { // элемент массива, функция открытия попапа
     this._name = item.name;
     this._link = item.link;
+    this.handleCardClick = handleCardClick;
   }
 
   _getElement() { // создание разметки
@@ -84,15 +85,22 @@ export class Card {
     return element;
   }
 
-  generate() {
-    this.element = this._getElement(); // запишем разметку в приватное поле _element
+  generate() { // публичный метод создания карточки
+    this.element = this._getElement(); // запишем разметку в приватное поле element
     this.element.querySelector(".elements-item__title").textContent = this._name;
     this.element.querySelector(".elements-item__photo").src = this._link;
     this.element.querySelector(".elements-item__photo").alt = this._link;
 
+    this._setEventListener();
+
     return this._element;
   }
 
-
-
+  _setEventListener() {
+    this.element // слушатель на клик по карточке
+    .querySelector(".elements-item__photo")
+    .addEventListener("click", () => {
+      this.handleCardClick();
+    })
+  }
 }

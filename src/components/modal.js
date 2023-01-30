@@ -3,19 +3,19 @@ const modals = document.querySelectorAll(".popup");
 const modalCreateCard = document.querySelector(".popup_type_card");
 const formPlace = modalCreateCard.querySelector(".popup__form");
 
-//Функция открытия окна
+// функция открытия окна
 export const openModal = function (popup) {
   popup.classList.add(modalActiveClass);
   document.addEventListener("keydown", closeByEsc);
 };
 
-//Функция закрытия окна
+// функция закрытия окна
 export const closeModal = function (popup) {
   popup.classList.remove(modalActiveClass);
   document.removeEventListener("keydown", closeByEsc);
 };
 
-// функция закрытия по esc
+// функция закрытия по Esc
 function closeByEsc(evt) {
   if (evt.key === "Escape") {
     const openedPopup = document.querySelector(".popup_opened");
@@ -32,7 +32,7 @@ modals.forEach((popup) => {
   });
 });
 
-//функция очистки модального окна: название места и ссылка
+// функция очистки модального окна: название места и ссылка
 export const clearInput = () => {
   formPlace.reset();
 };
