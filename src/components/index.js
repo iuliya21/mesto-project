@@ -34,8 +34,25 @@ const api = new Api(currentUser);
 
 const popupProfile = new Popup(".popup_type_edit");
 const popupFullImage = new PopupWithImage(".popup_type_image", { fullImage, imageOpenFullDescription });
-const popupAddCard = new Popup(".popup_type_card");
 const popupAvatar = new Popup(".popup_type_profile-photo");
+
+const popupEditProfile = new PopupWithForm(".popup_type_edit", (evt, getInputs) => {
+  evt.preventDefault();
+  buttonEditProfile.textContent = 'Сохранение...';
+  api.editInfoUser(getInputs.name, getInputs.job)
+    .then((data) => {
+      userInfo.setUserInfo(data);
+      popupProfile.close();
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+    .finally(() => {
+      buttonEditProfile.textContent = 'Сохранить';
+    })
+});
+popupEditProfile.setEventListeners();
+
 
 Promise.all([api.getUserCurrent(), api.getCards()])
   .then(([myProfile, cards]) => { //данные из моего профиля
@@ -48,23 +65,6 @@ Promise.all([api.getUserCurrent(), api.getCards()])
   .catch((err) => {
     console.error(err);
   })
-
-//функция, которая сохраняет введенные значения в форму редактирования профиля и закрывает её
-function submitHandlerForm(evt) {
-  evt.preventDefault();
-  buttonEditProfile.textContent = 'Сохранение...';
-  api.editInfoUser(nameInput.value, jobInput.value)
-    .then((data) => {
-      userInfo.setUserInfo(data);
-      popupProfile.close();
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-    .finally(() => {
-      buttonEditProfile.textContent = 'Сохранить';
-    })
-}
 
 //Функция установки в текстовые поля формы имени и рода деятельности первого исследователя
 function setInput() {
@@ -163,12 +163,12 @@ profilePhotoEdit.addEventListener("click", () => {
   popupAvatar.open();
 });
 
-//слушатель на кнопку в форме изменения аватара
+//слушатель на кнопку в форме изменения аватара (событие submit)
 formEditPhoto.addEventListener('submit', changeAvatar);
 
 //Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы для редактирования профиля
 buttonOpenPopupProfile.addEventListener("click", () => {
-  popupProfile.open();
+  popupEditProfile.open();
   setInput();
 });
 
@@ -179,9 +179,6 @@ buttonOpenPopupCard.addEventListener("click", () => {
   buttonCreateCard.classList.add("popup__button_disabled");
   buttonCreateCard.setAttribute("disabled", "disabled");
 });
-
-//Отправка формы редактирования имени при событии sumbit
-formElement.addEventListener("submit", submitHandlerForm);
 
 //Отправка формы добавления карточки
 formPlace.addEventListener("submit", submitHandlerCard);
