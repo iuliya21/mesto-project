@@ -32,7 +32,7 @@ export class Popup {
   }
 }
 
-export class PopupWithImage extends Popup {
+export class PopupWithImage extends Popup { // попап с увеличенным изображением
   constructor(selector, { name, link }) {
     super(selector);
     this._name = name;
@@ -51,8 +51,8 @@ export class PopupWithForm extends Popup {
   constructor(selector, callback) {
     super(selector);
     this._callback = callback;
-    this._form = this.selector.querySelector('.popup__form');
-    this._inputs = this.selector.querySelectorAll('.popup__form-text');
+    this._form = document.querySelector(this.selector).querySelector('.popup__form');
+    this._inputs = document.querySelector(this.selector).querySelectorAll('.popup__form-text');
   }
 
   _getInputValues() { // приватный метод, собирает данные всех полей формы
@@ -60,13 +60,12 @@ export class PopupWithForm extends Popup {
     this._inputs.forEach((input) => {
       this._inputValues[input.name] = input.value;
     })
-    
     return this._inputValues;
   }
 
-  setEventListener() { // должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы
-    super.setEventListener();
-    this.selector.addEventListener("submit", (evt) => {
+  setEventListeners() { // должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы
+    super.setEventListeners();
+    document.querySelector(this.selector).addEventListener("submit", (evt) => {
       this._callback(evt, this._getInputValues());
     })
   }
