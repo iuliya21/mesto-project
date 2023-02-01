@@ -69,10 +69,15 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
 };
 
 export class Card {
-  constructor(item, handleCardClick) { // элемент массива, функция открытия попапа
+  constructor(item, profile, handleCardClick, deleteCallback, myPushLike, myDeleteLike) { // элемент массива
+    this.item = item;
     this._name = item.name;
     this._link = item.link;
     this.handleCardClick = handleCardClick;
+    this.profile = profile; // document.querySelector(".profile")
+    this._deleteCallback = deleteCallback;
+    this.myPushLike = myPushLike;
+    this.myDeleteLike = myDeleteLike;
   }
 
   _getElement() { // создание разметки
@@ -91,16 +96,40 @@ export class Card {
     this.element.querySelector(".elements-item__photo").src = this._link;
     this.element.querySelector(".elements-item__photo").alt = this._link;
 
-    this._setEventListener();
+    if(this.profile.id === this.item.owner._id) { // добавляем корзину, если картинка наша
+      this.element.querySelector(".elements-item__button").classList.add("elements-item__button_active");
+    }
 
-    return this._element;
+    if(this.item.likes.length === 0) {
+      this.element.querySelector(".elements-item__counter-like").textContent = "";
+    } else {
+      this.element.querySelector(".elements-item__counter-like").textContent = this.item.likes.length;
+    }
+
+    this.item.likes.forEach((obj) => {
+      if (Object.values(obj).includes(this.profile.id)) {
+        this.element.querySelector(".elements-item__like").classList.add("elements-item__like_active");
+      }
+    })
+
+    this._setEventListeners();
+
+    return this.element;
   }
 
-  _setEventListener() {
-    this.element // слушатель на клик по карточке
-    .querySelector(".elements-item__photo")
-    .addEventListener("click", () => {
+  _setEventListeners() {
+    this.element.querySelector(".elements-item__photo").addEventListener("click", () => { // вызов попапа withImage
       this.handleCardClick();
+    })
+    this.element.querySelector(".elements-item__button").addEventListener("click", (evt) => { // слушатель на корзину
+      this._deleteCallback(evt)
+    })
+    this.element.querySelector(".elements-item__like").addEventListener("click", (evt) => {
+      if (!evt.target.classList.contains("elements-item__like_active")) {
+        this.myPushLike(item, evt, countLike);
+      } else {
+        this.myDeleteLike(item, evt, countLike);
+      }
     })
   }
 }

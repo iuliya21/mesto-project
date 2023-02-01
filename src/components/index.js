@@ -4,20 +4,20 @@ import { openModal, closeModal, clearInput } from "./modal.js";
 import { renderCard, createItem, removeCard, profile, Card } from "./Card.js";
 import { Api, currentUser } from "./Api.js";
 import { UserInfo } from "./UserInfo.js";
-import { Popup, PopupWithImage, PopupWithForm } from "./Popup.js";
+import { PopupWithImage, PopupWithForm } from "./Popup.js";
 
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
 const buttonOpenPopupCard = document.querySelector(".profile__button"); //кнопка добавления новой карточки
 const modalEditProfile = document.querySelector(".popup_type_edit"); //первый попап
 const buttonEditProfile = modalEditProfile.querySelector(".popup__button"); //кнопка сохранить профиль
 const modalCreateCard = document.querySelector(".popup_type_card"); // второй попап
-const placeInput = modalCreateCard.querySelector(".popup__form-text_input_place");
-const linkInput = modalCreateCard.querySelector(".popup__form-text_input_link");
+// const placeInput = modalCreateCard.querySelector(".popup__form-text_input_place");
+// const linkInput = modalCreateCard.querySelector(".popup__form-text_input_link");
 const formPlace = modalCreateCard.querySelector(".popup__form"); //форма для второго попапа
 const editPhotoProfile = document.querySelector(".popup_type_profile-photo"); //попап редактирования фото профиля
 const formEditPhoto = editPhotoProfile.querySelector(".popup__form"); //форма попапа редактирования фото профиля
 const buttonEditPhoto = editPhotoProfile.querySelector(".popup__button"); //кнопка сохранить новое фото профиля
-const inputEditPhotoProfile = editPhotoProfile.querySelector(".popup__form-text_input_photo-link");
+// const inputEditPhotoProfile = editPhotoProfile.querySelector(".popup__form-text_input_photo-link");
 const nameText = document.querySelector(".profile__title");
 const jobText = document.querySelector(".profile__paragraph");
 const formElement = document.querySelector(".popup__form"); //форма для первого попапа
@@ -32,9 +32,7 @@ const imageOpenFullDescription = document.querySelector(".popup-image__descripti
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
 
-const popupProfile = new Popup(".popup_type_edit");
 const popupFullImage = new PopupWithImage(".popup_type_image", { fullImage, imageOpenFullDescription });
-const popupAvatar = new Popup(".popup_type_profile-photo");
 
 const popupEditProfile = new PopupWithForm(".popup_type_edit", (evt, getInputs) => {
   evt.preventDefault();
@@ -42,7 +40,7 @@ const popupEditProfile = new PopupWithForm(".popup_type_edit", (evt, getInputs) 
   api.editInfoUser(getInputs.name, getInputs.job)
     .then((data) => {
       userInfo.setUserInfo(data);
-      popupProfile.close();
+      popupEditProfile.close();
     })
     .catch((err) => {
       console.error(err)
@@ -53,13 +51,50 @@ const popupEditProfile = new PopupWithForm(".popup_type_edit", (evt, getInputs) 
 });
 popupEditProfile.setEventListeners();
 
+const popupEditPhoto = new PopupWithForm(".popup_type_profile-photo", (evt, getInputs) => {
+  evt.preventDefault();
+  buttonEditPhoto.textContent = 'Сохранение...';
+  api.changePhoto(getInputs.photo)
+    .then((data) => {
+      userInfo.setUserInfo(data);
+      popupEditPhoto.close();
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+    .finally(() => {
+      buttonEditPhoto.textContent = 'Сохранить';
+    });
+});
+popupEditPhoto.setEventListeners();
+
+const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
+  evt.preventDefault();
+  buttonCreateCard.textContent = 'Создание...';
+  api.createNewCard(getInputs.place, getInputs.link)
+    .then((item) => {
+      renderCard(createCard(item)); // createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike)
+      popupNewCard.close();
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+    .finally(() => {
+      buttonCreateCard.textContent = 'Создать';
+    })
+});
+popupNewCard.setEventListeners();
+
+const createCard = (item) => {
+  const createCardItem = new Card(item, profile, popupFullImage.open, myCardDelete, myPushLike, myDeleteLike);
+  return createCardItem.generate();
+}
 
 Promise.all([api.getUserCurrent(), api.getCards()])
   .then(([myProfile, cards]) => { //данные из моего профиля
     userInfo.setUserInfo(myProfile);
-
     cards.reverse().forEach((item) => { //загрузка карточек с сервера
-      renderCard(createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike));
+      renderCard(createCard(item));
     })
   })
   .catch((err) => {
@@ -123,48 +158,10 @@ function myDeleteLike(item, evt, countLike) {
     })
 }
 
-//функция сохранения информации в новую карточку
-function submitHandlerCard(evt) {
-  evt.preventDefault();
-  buttonCreateCard.textContent = 'Создание...';
-  api.createNewCard(placeInput.value, linkInput.value)
-    .then((item) => {
-      renderCard(createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike));
-      closeModal(modalCreateCard);
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-    .finally(() => {
-      buttonCreateCard.textContent = 'Создать';
-    })
-}
-
-//функция изменения аватарки пользователя
-function changeAvatar(evt) {
-  evt.preventDefault();
-  buttonEditPhoto.textContent = 'Сохранение...';
-  const avatar = inputEditPhotoProfile.value;
-  api.changePhoto(avatar)
-    .then((data) => {
-      userInfo.setUserInfo(data);
-      popupAvatar.close();
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-    .finally(() => {
-      buttonEditPhoto.textContent = 'Сохранить';
-    })
-}
-
 //слушатель на редактирование фото
 profilePhotoEdit.addEventListener("click", () => {
-  popupAvatar.open();
+  popupEditPhoto.open();
 });
-
-//слушатель на кнопку в форме изменения аватара (событие submit)
-formEditPhoto.addEventListener('submit', changeAvatar);
 
 //Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы для редактирования профиля
 buttonOpenPopupProfile.addEventListener("click", () => {
@@ -172,16 +169,16 @@ buttonOpenPopupProfile.addEventListener("click", () => {
   setInput();
 });
 
-//Слушатель на кнопку добавления новой карточки
+// cлушатель на кнопку добавления новой карточки
 buttonOpenPopupCard.addEventListener("click", () => {
-  openModal(modalCreateCard);
+  popupNewCard.open();
   clearInput();
   buttonCreateCard.classList.add("popup__button_disabled");
   buttonCreateCard.setAttribute("disabled", "disabled");
 });
 
-//Отправка формы добавления карточки
-formPlace.addEventListener("submit", submitHandlerCard);
+// // отправка формы добавления карточки
+// formPlace.addEventListener("submit", submitHandlerCard);
 
 const settings = {
   inputSelector: ".popup__form-text",
