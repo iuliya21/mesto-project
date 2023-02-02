@@ -73,7 +73,7 @@ const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
   buttonCreateCard.textContent = 'Создание...';
   api.createNewCard(getInputs.place, getInputs.link)
     .then((item) => {
-      renderCard(createCard(item)); // createItem(item, openModal, myCardDelete, myPushLike, myDeleteLike)
+      renderCard(createCard(item));
       popupNewCard.close();
     })
     .catch((err) => {
@@ -86,8 +86,41 @@ const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
 popupNewCard.setEventListeners();
 
 const createCard = (item) => {
-  const createCardItem = new Card(item, profile, popupFullImage, myCardDelete, myPushLike, myDeleteLike);
-  return createCardItem.generate();
+  const createCardItem = new Card(item, profile, popupFullImage, 
+    {myCardDelete: (item, element) => {
+      api.deleteCard(item._id)
+    .then(() => {
+      element.remove();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    },
+    myPushLike(item, evt, countLike) {
+      api.pushLike(item._id)
+        .then((data) => {
+          evt.target.classList.add("elements-item__like_active");
+          countLike.textContent = data.likes.length;
+        })
+        .catch((err) => {
+          console.error(err)
+        })},
+    myDeleteLike: (item, evt, countLike) => {
+      api.deleteLike(item._id)
+        .then((data) => {
+          evt.target.classList.remove("elements-item__like_active");
+          if (data.likes.length === 0) {
+            countLike.textContent = "";
+          } else {
+            countLike.textContent = data.likes.length;
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }});
+    
+    return createCardItem.generate();
 }
 
 Promise.all([api.getUserCurrent(), api.getCards()])
@@ -119,45 +152,6 @@ profilePhotoEdit.addEventListener("mouseover", () => {
   profilePhotoEdit.style.visibility = "visible";
 });
 
-//отправка запроса для удаления карточки
-function myCardDelete(item, element) {
-  api.deleteCard(item._id)
-    .then(() => {
-      removeCard(element);
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-}
-
-//поставить мой лайк
-function myPushLike(item, evt, countLike) {
-  api.pushLike(item._id)
-    .then((data) => {
-      evt.target.classList.add("elements-item__like_active");
-      countLike.textContent = data.likes.length;
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-}
-
-//удалить мой лайк
-function myDeleteLike(item, evt, countLike) {
-  api.deleteLike(item._id)
-    .then((data) => {
-      evt.target.classList.remove("elements-item__like_active");
-      if (data.likes.length === 0) {
-        countLike.textContent = "";
-      } else {
-        countLike.textContent = data.likes.length;
-      }
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-}
-
 //слушатель на редактирование фото
 profilePhotoEdit.addEventListener("click", () => {
   popupEditPhoto.open();
@@ -176,9 +170,6 @@ buttonOpenPopupCard.addEventListener("click", () => {
   buttonCreateCard.classList.add("popup__button_disabled");
   buttonCreateCard.setAttribute("disabled", "disabled");
 });
-
-// // отправка формы добавления карточки
-// formPlace.addEventListener("submit", submitHandlerCard);
 
 const settings = {
   inputSelector: ".popup__form-text",
