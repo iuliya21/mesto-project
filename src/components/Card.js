@@ -6,22 +6,22 @@ const modalImage = document.querySelector(".popup_type_image"); //третий �
 const fullImage = document.querySelector(".popup-image__photo"); //фото из третьего попапа
 const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
 
-//Функция удаления карточки
-export const removeCard = (element) => {
-  element.remove();
-};
+// //Функция удаления карточки
+// export const removeCard = (element) => {
+//   element.remove();
+// };
 
 export function renderCard(element) {
   list.prepend(element);
 }
 
-export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLike) => {
-  const element = cardItem.cloneNode(true);
-  const elementName = element.querySelector(".elements-item__title");
-  const elementPhoto = element.querySelector(".elements-item__photo"); //фотография места
-  const btnRemove = element.querySelector(".elements-item__button");
-  const imageLike = element.querySelector(".elements-item__like");
-  const countLike = element.querySelector(".elements-item__counter-like");
+// export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLike) => {
+//   const element = cardItem.cloneNode(true);
+//   const elementName = element.querySelector(".elements-item__title");
+//   const elementPhoto = element.querySelector(".elements-item__photo"); //фотография места
+//   const btnRemove = element.querySelector(".elements-item__button");
+//   const imageLike = element.querySelector(".elements-item__like");
+//   const countLike = element.querySelector(".elements-item__counter-like");
 
   // const openImage = function () { // функция, которая по клику увеличивает фото карточки
   //   fullImage.alt = item.name;
@@ -40,9 +40,9 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
   //   btnRemove.classList.add("elements-item__button_active");
   // }
 
-  btnRemove.addEventListener("click", () => {
-    myCardDelete(item, element);
-  })
+  // btnRemove.addEventListener("click", () => {
+  //   myCardDelete(item, element);
+  // })
 
   // imageLike.addEventListener("click", function (evt) {
   //   if (!evt.target.classList.contains("elements-item__like_active")) {
@@ -66,7 +66,7 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
   // })
 
   // return element;
-};
+// };
 
 export class Card {
   constructor(item, profile, handleCardClick, {myCardDelete, myPushLike, myDeleteLike}) {

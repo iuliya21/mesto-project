@@ -96,7 +96,7 @@ const createCard = (item) => {
       console.error(err);
     })
     },
-    myPushLike(item, evt, countLike) {
+    myPushLike: (item, evt, countLike) => {
       api.pushLike(item._id)
         .then((data) => {
           evt.target.classList.add("elements-item__like_active");
@@ -166,7 +166,7 @@ buttonOpenPopupProfile.addEventListener("click", () => {
 // cлушатель на кнопку добавления новой карточки
 buttonOpenPopupCard.addEventListener("click", () => {
   popupNewCard.open();
-  clearInput();
+  //clearInput();
   buttonCreateCard.classList.add("popup__button_disabled");
   buttonCreateCard.setAttribute("disabled", "disabled");
 });
