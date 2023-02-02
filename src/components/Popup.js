@@ -33,17 +33,17 @@ export class Popup {
 }
 
 export class PopupWithImage extends Popup { // попап с увеличенным изображением
-  constructor(selector, { name, link }) {
+  constructor(selector) {
     super(selector);
-    this._name = name;
-    this._link = link;
+    this.image = document.querySelector(".popup-image__photo");
+    this.text = document.querySelector(".popup-image__description");;
   }
 
-  open() { // при открытии попапа вставляет изображение и текст
+  open(name, link) { // при открытии попапа вставляет изображение и текст
     super.open();
-    document.querySelector(".popup-image__photo").alt = this._name;
-    document.querySelector(".popup-image__photo").src = this._link;
-    document.querySelector(".popup-image__description").textContent = this._name;
+    this.text.alt = name;
+    this.image.src = link;
+    this.text.textContent = name;
   }
 }
 

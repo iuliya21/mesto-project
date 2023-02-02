@@ -69,10 +69,10 @@ export const createItem = (item, openModal, myCardDelete, myPushLike, myDeleteLi
 };
 
 export class Card {
-  constructor(item, profile, handleCardClick, deleteCallback, myPushLike, myDeleteLike) { // элемент массива
+  constructor(item, profile, handleCardClick, deleteCallback, myPushLike, myDeleteLike) {
     this.item = item;
-    this._name = item.name;
-    this._link = item.link;
+    this._name = item.name; // наименование картинки, приходит из массива
+    this._link = item.link; // ссылка на картинку, приходит из массива
     this.handleCardClick = handleCardClick;
     this.profile = profile; // document.querySelector(".profile")
     this._deleteCallback = deleteCallback;
@@ -80,7 +80,7 @@ export class Card {
     this.myDeleteLike = myDeleteLike;
   }
 
-  _getElement() { // создание разметки
+  _getElement() { // создание разметки карточки и возврат разметки
     const element = document
       .querySelector("#template-card")
       .content
@@ -96,14 +96,16 @@ export class Card {
     this.element.querySelector(".elements-item__photo").src = this._link;
     this.element.querySelector(".elements-item__photo").alt = this._link;
 
+    this.countLike = this.element.querySelector(".elements-item__counter-like");
+
     if(this.profile.id === this.item.owner._id) { // добавляем корзину, если картинка наша
       this.element.querySelector(".elements-item__button").classList.add("elements-item__button_active");
     }
 
     if(this.item.likes.length === 0) {
-      this.element.querySelector(".elements-item__counter-like").textContent = "";
+      this.countLike.textContent = "";
     } else {
-      this.element.querySelector(".elements-item__counter-like").textContent = this.item.likes.length;
+      this.countLike.textContent = this.item.likes.length;
     }
 
     this.item.likes.forEach((obj) => {
@@ -119,16 +121,16 @@ export class Card {
 
   _setEventListeners() {
     this.element.querySelector(".elements-item__photo").addEventListener("click", () => { // вызов попапа withImage
-      this.handleCardClick();
+      this.handleCardClick.open(this._name, this._link);
     })
     this.element.querySelector(".elements-item__button").addEventListener("click", (evt) => { // слушатель на корзину
       this._deleteCallback(evt)
     })
     this.element.querySelector(".elements-item__like").addEventListener("click", (evt) => {
       if (!evt.target.classList.contains("elements-item__like_active")) {
-        this.myPushLike(item, evt, countLike);
+        this.myPushLike(this.item, evt, this.countLike);
       } else {
-        this.myDeleteLike(item, evt, countLike);
+        this.myDeleteLike(this.item, evt, this.countLike);
       }
     })
   }

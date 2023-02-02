@@ -32,7 +32,7 @@ const imageOpenFullDescription = document.querySelector(".popup-image__descripti
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
 
-const popupFullImage = new PopupWithImage(".popup_type_image", { fullImage, imageOpenFullDescription });
+const popupFullImage = new PopupWithImage(".popup_type_image");
 
 const popupEditProfile = new PopupWithForm(".popup_type_edit", (evt, getInputs) => {
   evt.preventDefault();
@@ -86,7 +86,7 @@ const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
 popupNewCard.setEventListeners();
 
 const createCard = (item) => {
-  const createCardItem = new Card(item, profile, popupFullImage.open, myCardDelete, myPushLike, myDeleteLike);
+  const createCardItem = new Card(item, profile, popupFullImage, myCardDelete, myPushLike, myDeleteLike);
   return createCardItem.generate();
 }
 
