@@ -68,14 +68,11 @@ export class PopupWithForm extends Popup {
     super.setEventListeners();
     document.querySelector(this.selector).addEventListener("submit", (evt) => {
       this._callback(evt, this._getInputValues());
-      this._form.reset();
     })
   }
 
   close() { // при закрытии попапа форма должна сбрасываться
     super.close();
-    document.querySelector(this.selector).removeEventListener("submit", (evt) => {
-      this._callback(evt, this._getInputValues());
-    })
+    this._form.reset();
   }
 }

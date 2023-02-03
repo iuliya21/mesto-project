@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import { FormValidator } from "./FormValidator.js";
-import { renderCard, Card } from "./Card.js";
+import { Card } from "./Card.js";
 import { Api, currentUser } from "./Api.js";
 import { UserInfo } from "./UserInfo.js";
 import { PopupWithImage, PopupWithForm } from "./Popup.js";
@@ -24,11 +24,28 @@ const jobInput = formElement.querySelector(".popup__form-text_input_job"); //и�
 const buttonCreateCard = formPlace.querySelector(".popup__button"); //кнопка "создать"
 const profilePhoto = document.querySelector(".profile__photo");
 const profilePhotoEdit = document.querySelector(".profile__photo-edit");
-// const fullImage = document.querySelector(".popup-image__photo"); // фотография полноэкранного изображения
-// const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
+let section;
+let cardElement;
 
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
+
+  Promise.all([api.getUserCurrent(), api.getCards()])
+    .then(([myProfile, cards]) => {
+      userInfo.setUserInfo(myProfile);
+      section = new Section({
+        cards: cards,
+        renderer: (item) => {
+          cardElement = createCard(item);
+          section.addItem(cardElement);
+        }
+      }, '.elements');
+      section.renderItems();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+
 
 const popupFullImage = new PopupWithImage(".popup_type_image");
 
@@ -71,7 +88,8 @@ const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
   buttonCreateCard.textContent = 'Создание...';
   api.createNewCard(getInputs.place, getInputs.link)
     .then((item) => {
-      renderCard(createCard(item));
+      cardElement = createCard(item);
+      section.addItem(cardElement);
       popupNewCard.close();
     })
     .catch((err) => {
@@ -120,23 +138,6 @@ const createCard = (item) => {
     return createCardItem.generate();
 }
 
-Promise.all([api.getUserCurrent(), api.getCards()])
-  .then(([myProfile, cards]) => { //данные из моего профиля
-    userInfo.setUserInfo(myProfile);
-    cards.reverse().forEach((item) => { //загрузка карточек с сервера
-      renderCard(createCard(item));
-    })
-  })
-  .catch((err) => {
-    console.error(err);
-  })
-
-//Функция установки в текстовые поля формы имени и рода деятельности первого исследователя
-function setInput() {
-  nameInput.value = nameText.textContent;
-  jobInput.value = jobText.textContent;
-}
-
 profilePhoto.addEventListener("mouseover", () => {
   profilePhotoEdit.style.visibility = "visible";
 });
@@ -157,13 +158,13 @@ profilePhotoEdit.addEventListener("click", () => {
 //Слушатель на кнопку карандаша, который при клике на карандаш вызывает функцию, которая открывает окно формы для редактирования профиля
 buttonOpenPopupProfile.addEventListener("click", () => {
   popupEditProfile.open();
-  setInput();
+  nameInput.value = userInfo.getUserInfo().name;
+  jobInput.value = userInfo.getUserInfo().job;
 });
 
 // cлушатель на кнопку добавления новой карточки
 buttonOpenPopupCard.addEventListener("click", () => {
   popupNewCard.open();
-  //clearInput();
   buttonCreateCard.classList.add("popup__button_disabled");
   buttonCreateCard.setAttribute("disabled", "disabled");
 });

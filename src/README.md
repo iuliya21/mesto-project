@@ -6,5 +6,7 @@
 
 4. **Функциональность** В проекте реализована возможность добавлять карточки, удалять карточки, ставить/удалять лайки, изменять информацию о пользователе, а также менять фотографию профиля пользователя.
 
-4. **Ссылка на github** https://github.com/iuliya21 - iuliya.chadlin@yandex.ru
+5. **Ссылка на gh pages** https://iuliya21.github.io/mesto-project/
+
+6. **Ссылка на github** https://github.com/iuliya21 - iuliya.chadlin@yandex.ru
    **Ссылка на github** https://github.com/TolkinSL - tolkinsl@yandex.ru
