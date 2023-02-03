@@ -83,11 +83,13 @@ const popupEditPhoto = new PopupWithForm(".popup_type_profile-photo", (evt, getI
 });
 popupEditPhoto.setEventListeners();
 
-const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
+const popupNewCard = new PopupWithForm(".popup_type_card",  
+  {handleFormSubmit: (evt) => {
   evt.preventDefault();
   buttonCreateCard.textContent = 'Создание...';
-  api.createNewCard(getInputs.place, getInputs.link)
+  api.createNewCard(popupNewCard.getInputValues())
     .then((item) => {
+      formPlace.reset();
       cardElement = createCard(item);
       section.addItem(cardElement);
       popupNewCard.close();
@@ -98,7 +100,8 @@ const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
     .finally(() => {
       buttonCreateCard.textContent = 'Создать';
     })
-});
+  }}
+);
 
 const createCard = (item) => {
   const createCardItem = new Card(item, profile, popupFullImage, 

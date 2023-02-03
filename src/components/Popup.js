@@ -48,15 +48,14 @@ export class PopupWithImage extends Popup { // попап с увеличенн�
 }
 
 export class PopupWithForm extends Popup {
-  constructor(selector, callback) {
+  constructor(selector, {handleFormSubmit}) {
     super(selector);
-    this._callback = callback;
-    
     this._form = document.querySelector(this.selector).querySelector('.popup__form');
     this._inputs = document.querySelector(this.selector).querySelectorAll('.popup__form-text');
+    this.handleFormSubmit = handleFormSubmit;
   }
 
-  _getInputValues() { // приватный метод, собирает данные всех полей формы
+  getInputValues() { // приватный метод, собирает данные всех полей формы
     this._inputValues = {};
     this._inputs.forEach((input) => {
       this._inputValues[input.name] = input.value;
@@ -66,9 +65,7 @@ export class PopupWithForm extends Popup {
 
   setEventListeners() { // должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы
     super.setEventListeners();
-    document.querySelector(this.selector).addEventListener("submit", (evt) => {
-      this._callback(evt, this._getInputValues());
-    })
+    document.querySelector(this.selector).addEventListener("submit", this.handleFormSubmit);
   }
 
   close() { // при закрытии попапа форма должна сбрасываться
@@ -76,3 +73,28 @@ export class PopupWithForm extends Popup {
     this._form.reset();
   }
 }
+
+// setEventListeners() { // должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы
+//   super.setEventListeners();
+//   document.querySelector(this.selector).addEventListener("submit", (evt) => {
+//     this._callback(evt, this._getInputValues());
+//   })
+// }
+
+// const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
+//   evt.preventDefault();
+//   buttonCreateCard.textContent = 'Создание...';
+//   api.createNewCard(getInputs.place, getInputs.link)
+//     .then((item) => {
+//       formPlace.reset();
+//       cardElement = createCard(item);
+//       section.addItem(cardElement);
+//       popupNewCard.close();
+//     })
+//     .catch((err) => {
+//       console.error(err)
+//     })
+//     .finally(() => {
+//       buttonCreateCard.textContent = 'Создать';
+//     })
+// });

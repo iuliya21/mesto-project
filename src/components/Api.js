@@ -47,13 +47,13 @@ export class Api {
     .then(res => this._checkResponse(res))
   }
 
-  createNewCard(name, link) { // создание новой карточки
+  createNewCard(data) { // создание новой карточки
     return fetch(`${this.currentUrl}/cards`, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        name: name,
-        link: link
+        name: data.place,
+        link: data.link
       })
     })
     .then(res => this._checkResponse(res))
