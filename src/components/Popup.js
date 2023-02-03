@@ -51,6 +51,7 @@ export class PopupWithForm extends Popup {
   constructor(selector, callback) {
     super(selector);
     this._callback = callback;
+    
     this._form = document.querySelector(this.selector).querySelector('.popup__form');
     this._inputs = document.querySelector(this.selector).querySelectorAll('.popup__form-text');
   }
@@ -59,7 +60,7 @@ export class PopupWithForm extends Popup {
     this._inputValues = {};
     this._inputs.forEach((input) => {
       this._inputValues[input.name] = input.value;
-    })
+    });
     return this._inputValues;
   }
 
@@ -67,11 +68,14 @@ export class PopupWithForm extends Popup {
     super.setEventListeners();
     document.querySelector(this.selector).addEventListener("submit", (evt) => {
       this._callback(evt, this._getInputValues());
+      this._form.reset();
     })
   }
 
   close() { // при закрытии попапа форма должна сбрасываться
     super.close();
-    this._form.reset();
+    document.querySelector(this.selector).removeEventListener("submit", (evt) => {
+      this._callback(evt, this._getInputValues());
+    })
   }
 }

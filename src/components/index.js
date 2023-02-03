@@ -1,23 +1,21 @@
 import '../pages/index.css';
 import { FormValidator } from "./FormValidator.js";
-import { openModal, closeModal, clearInput } from "./modal.js";
-import { renderCard, createItem, removeCard, profile, Card } from "./Card.js";
+import { renderCard, Card } from "./Card.js";
 import { Api, currentUser } from "./Api.js";
 import { UserInfo } from "./UserInfo.js";
 import { PopupWithImage, PopupWithForm } from "./Popup.js";
+import { Section } from "./Section.js";
 
+const profile = document.querySelector(".profile"); //профиль пользователя
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
 const buttonOpenPopupCard = document.querySelector(".profile__button"); //кнопка добавления новой карточки
 const modalEditProfile = document.querySelector(".popup_type_edit"); //первый попап
 const buttonEditProfile = modalEditProfile.querySelector(".popup__button"); //кнопка сохранить профиль
 const modalCreateCard = document.querySelector(".popup_type_card"); // второй попап
-// const placeInput = modalCreateCard.querySelector(".popup__form-text_input_place");
-// const linkInput = modalCreateCard.querySelector(".popup__form-text_input_link");
 const formPlace = modalCreateCard.querySelector(".popup__form"); //форма для второго попапа
 const editPhotoProfile = document.querySelector(".popup_type_profile-photo"); //попап редактирования фото профиля
 const formEditPhoto = editPhotoProfile.querySelector(".popup__form"); //форма попапа редактирования фото профиля
 const buttonEditPhoto = editPhotoProfile.querySelector(".popup__button"); //кнопка сохранить новое фото профиля
-// const inputEditPhotoProfile = editPhotoProfile.querySelector(".popup__form-text_input_photo-link");
 const nameText = document.querySelector(".profile__title");
 const jobText = document.querySelector(".profile__paragraph");
 const formElement = document.querySelector(".popup__form"); //форма для первого попапа
@@ -26,8 +24,8 @@ const jobInput = formElement.querySelector(".popup__form-text_input_job"); //и�
 const buttonCreateCard = formPlace.querySelector(".popup__button"); //кнопка "создать"
 const profilePhoto = document.querySelector(".profile__photo");
 const profilePhotoEdit = document.querySelector(".profile__photo-edit");
-const fullImage = document.querySelector(".popup-image__photo"); // фотография полноэкранного изображения
-const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
+// const fullImage = document.querySelector(".popup-image__photo"); // фотография полноэкранного изображения
+// const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
 
 const userInfo = new UserInfo(profile, nameText, jobText, profilePhoto);
 const api = new Api(currentUser);
@@ -83,7 +81,6 @@ const popupNewCard = new PopupWithForm(".popup_type_card", (evt, getInputs) => {
       buttonCreateCard.textContent = 'Создать';
     })
 });
-popupNewCard.setEventListeners();
 
 const createCard = (item) => {
   const createCardItem = new Card(item, profile, popupFullImage, 

@@ -1,10 +1,9 @@
-export const profile = document.querySelector(".profile"); //профиль пользователя
 const list = document.querySelector(".elements");
-const cardTemplateContent = document.querySelector("#template-card").content; //контент template
-const cardItem = cardTemplateContent.querySelector(".elements-item");
-const modalImage = document.querySelector(".popup_type_image"); //третий попап с увеличенным изображением
-const fullImage = document.querySelector(".popup-image__photo"); //фото из третьего попапа
-const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
+// const cardTemplateContent = document.querySelector("#template-card").content; //контент template
+// const cardItem = cardTemplateContent.querySelector(".elements-item");
+// const modalImage = document.querySelector(".popup_type_image"); //третий попап с увеличенным изображением
+// const fullImage = document.querySelector(".popup-image__photo"); //фото из третьего попапа
+// const imageOpenFullDescription = document.querySelector(".popup-image__description"); //подпись фото из третьего попапа
 
 // //Функция удаления карточки
 // export const removeCard = (element) => {
@@ -79,27 +78,16 @@ export class Card {
     this.myCardDelete = myCardDelete;
     this.myPushLike = myPushLike;
     this.myDeleteLike = myDeleteLike;
+    this.element = document.querySelector("#template-card").content.querySelector(".elements-item").cloneNode(true);
+    this.buttonRemove = this.element.querySelector(".elements-item__button");
+    this.itemLike = this.element.querySelector(".elements-item__like");
+    this.countLike = this.element.querySelector(".elements-item__counter-like");
   }
 
-  _getElement() { // создание разметки карточки и возврат разметки
-    const elementTemplate = document
-      .querySelector("#template-card")
-      .content
-      .querySelector(".elements-item")
-      .cloneNode(true);
-
-    return elementTemplate;
-  }
-
-  generate() { // публичный метод создания карточки
-    this.element = this._getElement(); // запишем разметку в приватное поле element
+  generate() { // публичный метод создания карточки 
     this.element.querySelector(".elements-item__title").textContent = this._name;
     this.element.querySelector(".elements-item__photo").src = this._link;
     this.element.querySelector(".elements-item__photo").alt = this._link;
-    this.buttonRemove = this.element.querySelector(".elements-item__button");
-    this.itemLike = this.element.querySelector(".elements-item__like");
-
-    this.countLike = this.element.querySelector(".elements-item__counter-like");
 
     if(this.profile.id === this.item.owner._id) { // добавляем корзину, если картинка наша
       this.buttonRemove.classList.add("elements-item__button_active");
