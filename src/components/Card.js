@@ -1,4 +1,4 @@
-const list = document.querySelector(".elements");
+// const list = document.querySelector(".elements");
 
 export class Card {
   constructor(item, profile, handleCardClick, {myCardDelete, myPushLike, myDeleteLike}) {

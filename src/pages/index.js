@@ -1,10 +1,13 @@
-import '../pages/index.css';
-import { FormValidator } from "./FormValidator.js";
-import { Card } from "./Card.js";
-import { Api, currentUser } from "./Api.js";
-import { UserInfo } from "./UserInfo.js";
-import { PopupWithImage, PopupWithForm } from "./Popup.js";
-import { Section } from "./Section.js";
+import './index.css';
+import { FormValidator } from "../components/FormValidator.js";
+import { settings } from "../utils/utils.js";
+import { Card } from "../components/Card.js";
+import { Api } from "../components/Api.js";
+import { currentUser } from "../utils/utils.js";
+import { UserInfo } from "../components/UserInfo.js";
+import { PopupWithImage } from "../components/PopupWithImage.js";
+import { PopupWithForm } from "../components/PopupWithForm.js";
+import { Section } from "../components/Section.js";
 
 const profile = document.querySelector(".profile"); //профиль пользователя
 const buttonOpenPopupProfile = document.querySelector(".profile__button-pencil"); //кнопка редактирования имени и деятельности
@@ -172,12 +175,12 @@ buttonOpenPopupCard.addEventListener("click", () => {
   buttonCreateCard.setAttribute("disabled", "disabled");
 });
 
-const settings = {
-  inputSelector: ".popup__form-text",
-  inputErrorClass: "popup__form-text_type_error",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-}
+// const settings = {
+//   inputSelector: ".popup__form-text",
+//   inputErrorClass: "popup__form-text_type_error",
+//   submitButtonSelector: ".popup__button",
+//   inactiveButtonClass: "popup__button_disabled",
+// }
 
 // запуск валидации
 const profileValidate = new FormValidator(settings, formElement);
