@@ -144,17 +144,17 @@ const createCard = (item) => {
     return createCardItem.generate();
 }
 
-profilePhoto.addEventListener("mouseover", () => {
-  profilePhotoEdit.style.visibility = "visible";
-});
-
-profilePhotoEdit.addEventListener("mouseout", () => {
-  profilePhotoEdit.style.visibility = "hidden";
-});
-
-profilePhotoEdit.addEventListener("mouseover", () => {
-  profilePhotoEdit.style.visibility = "visible";
-});
+// profilePhoto.addEventListener("mouseover", () => {
+//   profilePhotoEdit.style.visibility = "visible";
+// });
+//
+// profilePhotoEdit.addEventListener("mouseout", () => {
+//   profilePhotoEdit.style.visibility = "hidden";
+// });
+//
+// profilePhotoEdit.addEventListener("mouseover", () => {
+//   profilePhotoEdit.style.visibility = "visible";
+// });
 
 //слушатель на редактирование фото
 profilePhotoEdit.addEventListener("click", () => {
