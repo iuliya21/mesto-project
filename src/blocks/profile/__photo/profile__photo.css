@@ -4,15 +4,5 @@
   border-radius: 50%;
   object-fit: cover;
   z-index: 0;
+  cursor: pointer;
 }
-
-/*.profile__photo:hover {*/
-/*  opacity: 0.2;*/
-/*}*/
-
-/*.profile__photo {*/
-/*  width: 120px;*/
-/*  height: 120px;*/
-/*  object-fit: cover;*/
-/*  border-radius: 50%;*/
-/*}*/

@@ -15,12 +15,14 @@ export class Card {
     this.buttonRemove = this.element.querySelector(".elements-item__button");
     this.itemLike = this.element.querySelector(".elements-item__like");
     this.countLike = this.element.querySelector(".elements-item__counter-like");
+    this._title = this.element.querySelector(".elements-item__title");
+    this._photo = this.element.querySelector(".elements-item__photo");
   }
 
   generate() { // публичный метод создания карточки 
-    this.element.querySelector(".elements-item__title").textContent = this._name;
-    this.element.querySelector(".elements-item__photo").src = this._link;
-    this.element.querySelector(".elements-item__photo").alt = this._link;
+    this._title.textContent = this._name;
+    this._photo.src = this._link;
+    this._photo.alt = this._link;
 
     if(this.profile.id === this.item.owner._id) { // добавляем корзину, если картинка наша
       this.buttonRemove.classList.add("elements-item__button_active");
@@ -43,20 +45,38 @@ export class Card {
     return this.element;
   }
 
+  removeCard() {
+    this.element.remove();
+  }
+
+  pushMyLike(data) {
+    this.itemLike.classList.add("elements-item__like_active");
+    this.countLike.textContent = data.likes.length;
+  }
+
+  deleteMyLike(data) {
+    this.itemLike.classList.remove("elements-item__like_active");
+      if (data.likes.length === 0) {
+        this.countLike.textContent = "";
+      } else {
+        this.countLike.textContent = data.likes.length;
+      }
+  }
+
   _setEventListeners() {
     this.element.querySelector(".elements-item__photo").addEventListener("click", () => { // вызов попапа withImage
       this.handleCardClick.open(this._name, this._link);
     })
 
     this.buttonRemove.addEventListener("click", (evt) => {
-      this.myCardDelete(this.item, this.element);
+      this.myCardDelete(this.item);
     });
 
     this.itemLike.addEventListener("click", (evt) => {
       if (!evt.target.classList.contains("elements-item__like_active")) {
-        this.myPushLike(this.item, evt, this.countLike);
+        this.myPushLike(this.item);
       } else {
-        this.myDeleteLike(this.item, evt, this.countLike);
+        this.myDeleteLike(this.item);
       }
     })
   }

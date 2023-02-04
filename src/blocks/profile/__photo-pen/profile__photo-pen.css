@@ -7,4 +7,5 @@
   background-color: transparent;
   visibility: hidden;
   z-index: 0;
+  cursor: pointer;
 }

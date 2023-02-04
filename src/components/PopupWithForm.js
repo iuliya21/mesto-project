@@ -3,7 +3,6 @@ import { Popup } from "./Popup.js";
 export class PopupWithForm extends Popup {
   constructor(selector, {handleFormSubmit}) {
     super(selector);
-    this._form = document.querySelector(this.selector).querySelector('.popup__form');
     this._inputs = document.querySelector(this.selector).querySelectorAll('.popup__form-text');
     this.handleFormSubmit = handleFormSubmit;
   }
@@ -18,7 +17,7 @@ export class PopupWithForm extends Popup {
 
   setEventListeners() { // должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы
     super.setEventListeners();
-    document.querySelector(this.selector).addEventListener("submit", this.handleFormSubmit);
+    this._form.addEventListener("submit", this.handleFormSubmit);
   }
 
   close() { // при закрытии попапа форма должна сбрасываться

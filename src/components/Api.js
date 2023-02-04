@@ -35,13 +35,13 @@ export class Api {
       .then(res => this._checkResponse(res))
   }
 
-  editInfoUser(name, about) { // изменение данных пользователи и рода деятельности
+  editInfoUser(data) { // изменение данных пользователи и рода деятельности
     return fetch(`${this.currentUrl}/users/me`, {
       method: 'PATCH',
       headers: this.headers,
       body: JSON.stringify({
-        name: name,
-        about: about
+        name: data.name,
+        about: data.job
       })
     })
     .then(res => this._checkResponse(res))
@@ -83,12 +83,12 @@ export class Api {
     .then(res => this._checkResponse(res))
   }
 
-  changePhoto(photo) { // изменить аватар
+  changePhoto(data) { // изменить аватар
     return fetch(`${this.currentUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this.headers,
       body: JSON.stringify({
-        avatar: photo
+        avatar: data.photo
       })
     })
     .then(res => this._checkResponse(res))
