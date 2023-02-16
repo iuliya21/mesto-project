@@ -1,11 +1,27 @@
 .profile__photo-edit {
-  background: rgba(0, 0, 0, 0.8);
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;  
-  cursor: pointer;
-  visibility: hidden;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  background-color: transparent;
+  z-index: 5;
 }
+
+.profile__photo-edit:hover .profile__photo-pen {
+  visibility: visible;
+}
+
+.profile__photo-edit:hover .profile__photo {
+  opacity: 0.2;
+}
+
+/*.profile__photo-edit {*/
+/*  background: rgba(0, 0, 0, 0.8);*/
+/*  width: 120px;*/
+/*  height: 120px;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  position: absolute;  */
+/*  cursor: pointer;*/
+/*  visibility: hidden;*/
+/*}*/
