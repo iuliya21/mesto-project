@@ -22,5 +22,4 @@
   <img src="https://github.com/devicons/devicon/blob/master/icons/babel/babel-original.svg" title="babel" alt="babel" width="45" height="45"/>&nbsp;
 </div>
 
-
-  https://github.com/iuliya21/mesto-project/assets/106624168/286216bd-091b-4852-8b78-fe3826b5b20c
+https://github.com/iuliya21/mesto-project/assets/106624168/7bf4fa45-9a96-4c74-900d-b58335316b28
