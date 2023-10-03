@@ -10,7 +10,7 @@
 - Возможность ставить/удалять лайки фотографиям;
 - Валидация полей ввода.
 
-<h3 align="center"><i>Технологический стек</i></h3>
+<h3 align="center"><i>Стек</i></h3>
 <p align="center">JavaScript, REST API, БЭМ, grid, flex, webpack</p>
 
 <div align="center">
